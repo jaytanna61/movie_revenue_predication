@@ -1,0 +1,25 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+
+
+def linear_reg():
+    dataset = pd.read_excel('2014 and 2015 CSM dataset 2.xlsx')
+    X = dataset.iloc[1:, 1:-1].values
+    y = dataset.iloc[1:, -1].values
+
+    from sklearn.preprocessing import StandardScaler
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+
+    y = y.reshape(-1, 1)
+
+    from sklearn import linear_model
+    clf = linear_model.LinearRegression()
+    accuracies = cross_val_score(estimator=clf, X=X, y=y, cv=10, n_jobs=-1, scoring='neg_mean_squared_error')
+    rms = np.sqrt(-accuracies)
+    print "RMSE Value : " , rms.mean()
+
+
+linear_reg()
+####################
